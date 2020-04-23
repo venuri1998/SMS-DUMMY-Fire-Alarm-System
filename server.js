@@ -1,23 +1,20 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+
 
 //help filter the API data that requested from REST-API
 const _ = require('underscore');
 
-//help with comparing co2 and smoke level
+
 const Alarm = require('./models/alarm');
-
-//help with http requests from API
 const axios = require('axios');
-
 const app = express();
 const smsService = require('./services/smsService');
 
 
 const cron = require('cron');
 
-//help with checking and getting API data periodically after 1 minute and send sms to the client phone
-const MessageAlert = cron.job("0 * * * * *", function () {
+//help with checking and getting API data periodically after 15 seconds and send sms to the client phone
+const MessageAlert = cron.job("*/15 * * * * *", function () {
     axios.get("http://localhost:5000/all").then(res => {
         let floors = res.data;
        // console.log(floors);
