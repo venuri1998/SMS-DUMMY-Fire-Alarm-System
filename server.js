@@ -14,7 +14,7 @@ const smsService = require('./services/smsService');
 const cron = require('cron');
 
 //help with checking and getting API data periodically after 15 seconds and send sms to the client phone
-const MessageAlert = cron.job("*/15 * * * * *", function () {
+const MessageAlert = cron.job("*/60 * * * * *", function () {
     axios.get("http://localhost:5000/all").then(res => {
         let floors = res.data;
        // console.log(floors);
@@ -29,13 +29,13 @@ const MessageAlert = cron.job("*/15 * * * * *", function () {
 
 
         //get each floors
-        for( let floor_identifier = 1;floor_identifier<6;floor_identifier++ ){
+        for( let floor_identifier = 1;floor_identifier<floors.length;floor_identifier++ ){
 
             let floor_no = _.findWhere(floors, { FloorNo: alarm.fll + floor_identifier});
 
 
             //get each rooms in floors
-            for(let n=0;n<6;n++){
+            for(let n=0;n<floor_no.Rooms.length;n++){
 
                 if((floor_no.Rooms[n].SmokeLevel>alarm.smokelevel) &&(floor_no.Rooms[n].CO2Level>alarm.co2level) ){
 
